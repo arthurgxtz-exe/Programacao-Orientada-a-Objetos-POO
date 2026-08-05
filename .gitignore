@@ -1,0 +1,51 @@
+# Arquivos compilados do Java
+*.class
+*.log
+*.ctxt
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Pasta de saída do compilador (onde ficam os arquivos .class)
+bin/
+
+# Ferramenta de Build: Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Ferramenta de Build: Gradle
+.gradle/
+build/
+!src/**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+.grafana/
+
+# Arquivos de configuração do VS Code
+.vscode/
+
+# Arquivos de outras IDEs (IntelliJ e Eclipse) para evitar conflitos
+.idea/
+*.iml
+*.iws
+.settings/
+.classpath
+.project
+.factorypath
+
+# Arquivos temporários do Linux/Sistema Operacional
+.DS_Store
+.directory
+Thumbs.db
