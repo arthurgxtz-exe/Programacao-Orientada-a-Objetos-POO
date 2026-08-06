@@ -13,9 +13,6 @@ public class Ex4 {
                 maior = vet[i];
             }
         }
-
         System.out.println("O maior valor:"+ maior);
-
-
     }
 }
