@@ -1,7 +1,8 @@
 import java.util.Scanner;
 public class Palindromo {
 
-    public static int palindromo(String nome){
+    public static int palindromo(String string){
+        String nome = string.replace(" ", "").toLowerCase();
         int tamanho = nome.length();
         int sinal = 1;
         
