@@ -29,7 +29,7 @@ public class Retangulo {
         scanf.nextLine();
         return op;
     }
-    public static void main(){
+    public static void main(String[] args){
 
         Retangulo MyRetangulo = new Retangulo();
         int op;
