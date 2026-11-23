@@ -1,0 +1,1171 @@
+CONSULTA ESTRATÉGICA — POO EM JAVA ATÉ CASTING
+Resumo rápido + guia completo | Pedro | 04/11/2026
+
+ESCOPO E FONTES
+Tópicos confirmados pela imagem do Classroom: Java; orientação a objetos;
+construtores; encapsulamento; sobrecarga; relacionamento entre objetos;
+vetor de objetos; herança; polimorfismo; casting.
+A imagem mostra títulos. O conteúdo interno dos slides não foi acessado.
+Exemplos baseados nos enunciados locais: Biblioteca, Imobiliária, Frota,
+Veículo/Locadora, Reserva/Hotel, Produto/Loja, Ônibus e Paciente/Clínica.
+As regras particulares de cada prova sempre prevalecem sobre este guia.
+O material é organizado para consulta: use Ctrl+F e os códigos abaixo.
+
+ÍNDICE PARA CTRL+F
+[RAPIDO]      Resumo para quando faltar tempo
+[ROTEIRO]     Traduzir enunciado em classes e métodos
+[JAVA]        Tipos, operadores, String, condições e laços
+[OBJETOS]     Classe, objeto, referência, atributos e métodos
+[UML]         Diagrama, visibilidade e assinaturas
+[CONSTRUTOR]  Construtor, this(), super() e valores padrão
+[ENCAPSULAR]  private, protected, public, getters e setters
+[SOBRECARGA]  Mesmo nome, parâmetros diferentes
+[RELACAO]     Associação, agregação e composição
+[VETOR]       Cadastro, busca, exclusão, filtros e agregações
+[HERANCA]     extends, super, regras herdadas e sobrescrita
+[POLIMORFO]   Tipo da variável versus tipo real do objeto
+[CASTING]     Upcasting, downcasting e instanceof
+[MODELO]      Exemplo completo: 4 classes, pronto para adaptar
+[CALCULOS]    Porcentagens, taxas, médias e unidades
+[EXEMPLOS]    Fórmulas das avaliações encontradas
+[MENU]        Scanner, menu repetido e entrada de dados
+[ERROS]       Erros de compilação e execução; seus erros recorrentes
+[TESTES]      Testar caminhos e limites
+[ENTREGA]     Ordem de implementação e revisão final
+[COMPLEMENTO] static, final, abstract, interface e toString
+
+======================================================================
+[RAPIDO] 1. O QUE MAIS PROTEGE SUA NOTA
+======================================================================
+1) Copie EXATAMENTE nomes, tipos, ordem dos parâmetros e retornos pedidos.
+   adicionaImovel não é adicionarImovel. Double não é double.
+2) Construtor: mesmo nome da classe, SEM void e geralmente public.
+3) Herança: class Filha extends Pai; construtor chama super(...).
+4) Campo privado do pai: use getCampo(); não tente pai.campo diretamente.
+5) Método sobrescrito: use @Override e preserve a assinatura exigida.
+6) Vetor: antes de acessar um elemento, confira se ele não é null.
+7) Filtro: teste o vetor de ORIGEM; preencha o vetor de RESULTADO.
+8) Polimorfismo: Pai f = new Filha(...); f.calcular() executa a filha.
+9) Casting: if (f instanceof Filha) { Filha x = (Filha) f; ... }
+10) +p%: base * (1 + p/100.0). -p%: base * (1 - p/100.0).
+11) Regra do pai NÃO roda automaticamente no método sobrescrito.
+12) Boolean: true indica sucesso/estado; double devolve valor; void não
+    devolve valor. Retorne o que o enunciado pede, não só imprima.
+13) Compilar não garante lógica correta. Teste cada condição do texto.
+
+RECORTES PARA LEMBRAR
+Comparar texto: "CENTRO".equalsIgnoreCase(localizacao)
+Busca segura:  item != null && item.getNome().equalsIgnoreCase(nome)
+Valor ajustado: return item.calculaSalario(); // não getSalario()
+Vetor misto:   Funcionario[] funcionarios = new Funcionario[10];
+Inserção:      primeira posição null; se não houver, return false.
+Exclusão:      encontrou? vetor[i] = null; return true.
+Tipo especial: item instanceof Auxiliar
+Cast seguro:   Auxiliar aux = (Auxiliar) item;
+Retornos vazios usuais: null para busca; false para operação sem sucesso;
+0.0 para cálculo sem resultado, APENAS quando o enunciado determinar.
+
+======================================================================
+[ROTEIRO] 2. COMO TRANSFORMAR O ENUNCIADO EM CÓDIGO
+======================================================================
+Passo A — Liste as classes e desenhe a hierarquia.
+  Imovel -> Edificacao -> Residencial / Comercial
+  Funcionario -> Bibliotecario / Auxiliar / Atendente
+  Biblioteca TEM funcionários. Ela NÃO É um Funcionario.
+
+Passo B — Para cada classe, anote:
+  atributos: nome, tipo e visibilidade;
+  construtores: nome, tipos e ORDEM dos parâmetros;
+  métodos: entrada, retorno, condição, mudança de atributo.
+
+Passo C — Faça uma tabela antes dos ifs:
+  condição                   resultado                muda atributo?
+  CENTRO + COMPRA            preco * 1.20             não
+  compra de 3 produtos       preco * 3                estoque += 3
+  venda acima do estoque     recusar como exigido     não
+
+Passo D — Diferencie os verbos do enunciado:
+  "retorna"       -> return ...;
+  "exibe"         -> montar String ou imprimir, conforme assinatura;
+  "atualiza"      -> alterar atributo do objeto;
+  "recebe"        -> parâmetro do método;
+  "armazena até N"-> vetor com N posições e verificação de capacidade;
+  "de acordo com tipo" -> if/else ou polimorfismo/casting, conforme pedido.
+
+Passo E — Implemente e compile em partes:
+  classe base -> subclasses -> classe gerenciadora -> main/interface.
+  Não escreva tudo para só depois descobrir o primeiro erro de sintaxe.
+
+Assinaturas incompatíveis podem impedir o validador inteiro de rodar,
+mesmo quando a fórmula isolada está correta.
+
+======================================================================
+[JAVA] 3. BASE DE JAVA QUE VOCÊ PRECISA USAR
+======================================================================
+TIPOS
+int idade = 20;             // inteiro
+double preco = 1000.0;      // decimal primitivo; não recebe null
+Double salario = 1000.0;    // objeto wrapper; pode ser null
+boolean ativo = true;      // true ou false
+char tipo = 'R';           // aspas simples: um caractere
+String nome = "Ana";       // aspas duplas: texto
+
+Use ponto nos números do código: 1.15, não 1,15.
+Double x = 10.0; é válido. Double x = 10; não é atribuição válida direta.
+Se UML/validador pede Double, declare Double, mesmo que use double local.
+Operação com Double nulo pode causar NullPointerException por unboxing.
+
+OPERADORES
+= atribui; == compara primitivos; != diferente.
+< menor; <= menor ou igual; > maior; >= maior ou igual.
+&& E: todas as condições precisam ser verdadeiras.
+|| OU: pelo menos uma precisa ser verdadeira.
+! nega: !ativo significa "não está ativo".
++= soma e atribui; -= subtrai e atribui; ++ acrescenta um.
+
+if (ativo) { ... }            // equivalente a ativo == true
+if (!ativo) { return 0.0; }   // condição de saída antecipada
+
+Não use: if (ativo = true). Isso atribui true e a condição será verdadeira.
+
+STRING
+nome.equals("Ana")            // compara conteúdo, distingue maiúsculas
+nome.equalsIgnoreCase("ANA")  // compara sem distinguir maiúsculas
+"Ana".equalsIgnoreCase(nome)  // também funciona se nome for null
+nome == outroNome             // compara referências; não usar para conteúdo
+nome.trim()                   // remove espaços nas extremidades
+nome.isEmpty()                // verifica String vazia
+
+IgnoreCase NÃO remove acentos: "LOCAÇÃO" e "LOCACAO" são diferentes.
+Não remova acentos nem espaços automaticamente se isso alterar a regra.
+
+CURTO-CIRCUITO
+if (f != null && f.getNome().equalsIgnoreCase(nome)) { ... }
+Primeiro verifica null. Se for null, não executa a segunda parte.
+Inverter a ordem pode causar exceção. Use &&, não &, nesse padrão.
+
+IF / ELSE
+if (condicaoA) {
+    return resultadoA;
+} else if (condicaoB) {
+    return resultadoB;
+}
+return resultadoPadrao;
+
+Dois ifs separados podem executar ambos. else if escolhe uma alternativa.
+Não coloque ponto e vírgula logo depois de if (...) ou for (...).
+
+LAÇOS
+for (int i = 0; i < vetor.length; i++) {
+    // índices válidos: 0 até length - 1; nunca i <= vetor.length
+}
+for (Funcionario f : funcionarios) {
+    // conveniente para ler; para substituir posições, prefira índice
+}
+
+ARRAY E STRING TÊM FORMAS DIFERENTES
+vetor.length      // atributo
+texto.length()    // método
+
+DIVISÃO E CONCATENAÇÃO
+5 / 2 = 2; 5 / 2.0 = 2.5; (double) 5 / 2 = 2.5.
+(double) (5 / 2) = 2.0: o truncamento já aconteceu antes do cast.
+"Total: " + 2 + 3 = "Total: 23".
+"Total: " + (2 + 3) = "Total: 5".
+Use parênteses para deixar a conta explícita.
+
+======================================================================
+[OBJETOS] 4. CLASSE, OBJETO, REFERÊNCIA, ESTADO E MÉTODOS
+======================================================================
+Classe = definição de atributos e comportamentos.
+Objeto = instância criada com new.
+Referência = variável que aponta para o objeto.
+Estado = valores atuais dos atributos de cada objeto.
+
+Produto p = new Produto("Livro", 50.0, 10, "EDUCACAO");
+  Produto: tipo da referência;
+  p: nome da variável;
+  new Produto(...): cria o objeto e executa o construtor.
+
+Produto outro = p;
+As duas variáveis apontam para o MESMO objeto. Não foi criada uma cópia.
+Alterar o estoque por p será visível por outro.
+p = null; não apaga o objeto nem torna outro null.
+
+Atributo pertence ao objeto; parâmetro pertence à chamada do método:
+private int estoque;
+public void setEstoque(int estoque) {
+    this.estoque = estoque;
+}
+this.estoque é o atributo; estoque à direita é o parâmetro.
+
+Java passa argumentos por valor. Ao passar um objeto, é copiado o valor
+da referência: o método pode alterar o objeto, mas reatribuir seu parâmetro
+não muda a variável original do chamador.
+
+MÉTODO COM RETORNO
+public Double total(int quantidade) {
+    return preco * quantidade;
+}
+
+MÉTODO SEM RETORNO
+public void setNome(String nome) {
+    this.nome = nome;
+}
+
+return encerra o método imediatamente.
+System.out.println(total) mostra uma informação; não substitui return total.
+Uma variável local deve ser inicializada antes de ser usada.
+Atributos recebem padrões: int 0, boolean false, referências null.
+Ainda assim, inicialize explicitamente os valores pedidos no construtor.
+
+======================================================================
+[UML] 5. DIAGRAMA E ASSINATURAS
+======================================================================
++ público    -> public
+- privado    -> private
+# protegido  -> protected
+sem símbolo no código -> acesso de pacote; não é private
+
+- nome: String                     -> private String nome;
++ calcular(qtd: int): Double        -> public Double calcular(int qtd)
++ Pessoa(nome: String)              -> public Pessoa(String nome)
+triângulo vazio apontando ao pai    -> extends
+itálico/abstrato, se indicado       -> abstract
+
+ASSINATURA DO MÉTODO: nome + tipos e ordem dos parâmetros.
+O retorno não permite sobrecarga por si só.
+O validador também depende do retorno e da visibilidade esperados.
+Nomes dos parâmetros não fazem parte da assinatura Java, mas a ordem
+semântica importa: String cargo e String nome podem ser trocados sem
+erro de compilação e produzir um objeto errado.
+
+Um método public Double calculaPreco() não é igual a calcularPreco().
+Um construtor com Double não é o mesmo que um construtor com double
+para reflexão e código previamente compilado. Siga o pedido exato.
+
+======================================================================
+[CONSTRUTOR] 6. CONSTRUTORES, this() E super()
+======================================================================
+public Funcionario(String nome, Double salario, int registro) {
+    this.nome = nome;
+    this.salario = salario;
+    this.registro = registro;
+}
+
+Construtor NÃO tem retorno, nem void.
+public void Funcionario(...) cria um método comum, não um construtor.
+
+CONSTRUTOR SEM ARGUMENTOS
+public Imobiliaria() {
+    imoveis = new Imovel[10];
+}
+Se ele for private, Principal não pode fazer new Imobiliaria().
+Se você não declara construtor algum, Java cria um sem argumentos, desde
+que a chamada ao construtor do pai seja válida. Declarou um construtor?
+Java não cria automaticamente os outros.
+
+VALOR PADRÃO COM SOBRECARGA
+public Reserva(int codigo, String nome, int diarias) {
+    this(codigo, nome, diarias, false);
+}
+public Reserva(int codigo, String nome, int diarias, boolean refeicoes) {
+    this.codigo = codigo;
+    this.nomeHospede = nome;
+    this.diarias = diarias;
+    this.incluiRefeicoes = refeicoes;
+}
+
+this(...) chama outro construtor da MESMA classe.
+super(...) chama construtor da SUPERCLASSE direta.
+this.campo acessa o atributo do objeto.
+super.metodo() executa a implementação do pai.
+
+PADRÃO DE CONSTRUTOR HERDADO
+public Auxiliar(int registro, String setor, String nome, Double salario) {
+    super(nome, salario, registro);
+    this.setor = setor;
+}
+
+Para Java 21 e para os moldes desta consulta, coloque this(...) ou
+super(...) como primeira instrução do construtor. Não coloque ambos no
+mesmo construtor: o construtor chamado com this(...) fará a chamada ao pai.
+Construtores não são herdados e não recebem @Override.
+
+Não crie construtores extras sem necessidade. Eles são úteis quando o
+exercício pede sobrecarga ou quando é necessário preservar compatibilidade.
+
+======================================================================
+[ENCAPSULAR] 7. VISIBILIDADE, GETTERS E SETTERS
+======================================================================
+private: acesso direto apenas no corpo da classe que declara o membro
+         (incluindo acesso permitido entre seus tipos aninhados).
+protected: mesmo pacote e subclasses; fora do pacote, existem restrições
+           sobre a referência usada para acessar o membro herdado.
+public: acessível onde a classe também for acessível.
+sem modificador: acessível no mesmo pacote.
+
+Em prova, siga os sinais do UML. Se não houver regra específica, atributos
+private e métodos públicos de acesso são um padrão comum.
+
+private Double salario;
+public Double getSalario() { return salario; }
+public void setSalario(Double salario) { this.salario = salario; }
+
+private boolean ativo;
+public boolean isAtivo() { return ativo; }
+public void setAtivo(boolean ativo) { this.ativo = ativo; }
+
+Campo private do pai não pode ser acessado diretamente na filha:
+return getSalario() * 1.10;    // se getSalario() for acessível
+
+Não redeclare salario na filha para contornar isso. Você criaria outro
+campo e poderia atualizar um enquanto o cálculo usa o outro.
+
+Validações que preservam uma regra devem valer no construtor E no setter.
+Ex.: se carga nunca pode ultrapassar capacidade, não basta validar só new.
+Não invente uma política de erro incompatível com o validador.
+
+Getter de vetor devolve uma referência ao vetor. Se devolver o próprio
+vetor, código externo pode alterar posições. Copiar pode melhorar proteção,
+mas preserve o contrato exigido pelo exercício e pela interface.
+
+======================================================================
+[SOBRECARGA] 8. SOBRECARGA NÃO É SOBRESCRITA
+======================================================================
+SOBRECARGA: mesmo nome, lista de parâmetros diferente.
+public Double calcular(int dias) { ... }
+public Double calcular(int dias, int km) { ... }
+public Double calcular(int dias, int km, boolean seguro) { ... }
+
+Serve para entradas diferentes e valores padrão.
+Não pode haver dois métodos que diferem apenas no tipo de retorno.
+Não use @Override só porque o nome do método se repete.
+
+SOBRESCRITA: subclasse redefine um método herdado compatível.
+@Override
+public Double calculaSalario() { ... }
+
+A escolha da SOBRECARGA ocorre na compilação, considerando os tipos das
+variáveis e argumentos. A implementação SOBRESCRITA é escolhida em execução
+conforme o tipo real do objeto.
+
+Exemplo importante para casting:
+Funcionario f = new Auxiliar(...);
+biblioteca.adicionaFuncionario(f);
+Essa chamada só compila se existir uma sobrecarga que aceite Funcionario
+(ou outro tipo compatível). Ter apenas Auxiliar, Atendente e Bibliotecario
+não basta, pois a variável f foi declarada como Funcionario.
+Alternativas: usar variável Auxiliar; fazer cast seguro; ou declarar um
+método que receba Funcionario, SE o enunciado permitir.
+
+REAPROVEITAR SEM DUPLICAR EFEITOS
+public Double calcularDiaria() {
+    return diarias * (incluiRefeicoes ? 250.0 : 200.0);
+}
+public Double calcularDiaria(Double taxaLimpeza) {
+    return calcularDiaria() + taxaLimpeza;
+}
+
+Se o método-base atualiza estoque/km, chame uma vez. Não repita a operação
+só para recalcular o retorno: pode vender ou atualizar km duas vezes.
+
+======================================================================
+[RELACAO] 9. RELACIONAMENTO ENTRE OBJETOS
+======================================================================
+HERANÇA = "é um": Auxiliar é um Funcionario.
+ASSOCIAÇÃO = "tem/usa": Biblioteca tem funcionários.
+
+public class Endereco {
+    private String cidade;
+    public Endereco(String cidade) { this.cidade = cidade; }
+    public String getCidade() { return cidade; }
+}
+public class Pessoa {
+    private Endereco endereco;
+    public Pessoa(Endereco endereco) { this.endereco = endereco; }
+    public String cidade() { return endereco.getCidade(); }
+}
+
+Uso:
+Endereco e = new Endereco("Palmas");
+Pessoa p = new Pessoa(e);
+
+Associação: relacionamento geral por referência.
+Agregação: relação todo/parte em que a parte tem vida independente.
+Composição: relação todo/parte com posse e ciclo de vida vinculados.
+Java não tem palavra-chave especial para agregação/composição; o projeto
+define o vínculo. Apenas fazer new dentro de uma classe não prova,
+isoladamente, que toda a semântica de composição foi satisfeita.
+
+Vetor de objetos é uma associação com várias referências.
+Biblioteca NÃO deve estender Funcionario só para guardar funcionários.
+Se Endereco puder ser null, verifique antes de chamar getCidade().
+
+======================================================================
+[VETOR] 10. VETORES DE OBJETOS — OS MOLDES MAIS IMPORTANTES
+======================================================================
+private Funcionario[] funcionarios = new Funcionario[10];
+
+Isso cria 10 POSIÇÕES, todas null. Não cria 10 funcionários.
+Cada posição aceita Funcionario ou qualquer subclasse compatível.
+
+CADASTRO NA PRIMEIRA VAGA
+public boolean adicionaFuncionario(Auxiliar aux) {
+    for (int i = 0; i < funcionarios.length; i++) {
+        if (funcionarios[i] == null) {
+            funcionarios[i] = aux;
+            return true;
+        }
+    }
+    return false;
+}
+
+Se pedidas três sobrecargas, mantenha as três assinaturas.
+Um método único com Funcionario é possível em outro projeto, mas não
+substitui automaticamente as assinaturas exigidas por um validador.
+
+BUSCA
+public Funcionario buscaFuncionario(String nome) {
+    for (Funcionario f : funcionarios) {
+        if (f != null && f.getNome().equalsIgnoreCase(nome)) {
+            return f;
+        }
+    }
+    return null;
+}
+
+EXCLUSÃO — USE ÍNDICE
+public boolean excluiFuncionario(String nome) {
+    for (int i = 0; i < funcionarios.length; i++) {
+        if (funcionarios[i] != null &&
+            funcionarios[i].getNome().equalsIgnoreCase(nome)) {
+            funcionarios[i] = null;
+            return true;
+        }
+    }
+    return false;
+}
+
+Em for (Funcionario f : funcionarios), fazer f = null só muda a variável
+local do laço. NÃO apaga a posição do vetor.
+
+FILTRO POR SUBCLASSE — ORIGEM E RESULTADO SÃO DIFERENTES
+public Auxiliar[] auxiliares() {
+    Auxiliar[] resultado = new Auxiliar[funcionarios.length];
+    int posicao = 0;
+    for (Funcionario f : funcionarios) {
+        if (f instanceof Auxiliar) {
+            resultado[posicao] = (Auxiliar) f;
+            posicao++;
+        }
+    }
+    return resultado;
+}
+
+instanceof null é false; nesse filtro o próprio instanceof já protege.
+Não teste resultado[i] instanceof Auxiliar: resultado está vazio!
+O resultado acima tem tamanho 10 e posições nulas no fim. Isso é normal
+nesse padrão. Só devolva vetor de tamanho exato se a questão exigir.
+
+FILTRO POR ESTADO
+Imovel[] resultado = new Imovel[imoveis.length];
+int posicao = 0;
+for (Imovel imovel : imoveis) {
+    if (imovel != null && imovel.isAtivo()) {
+        resultado[posicao++] = imovel;
+    }
+}
+return resultado;
+
+Devolver todos ou só ativos depende do enunciado. O nome "disponiveis"
+sozinho não decide a regra. Na referência local de Imobiliária: só ativos.
+Filtros residenciais/comerciais da referência incluem os inativos também.
+
+CÁLCULO APÓS BUSCA
+public Double mostraSalario(String nome) {
+    Funcionario f = buscaFuncionario(nome);
+    if (f == null) { return 0.0; }
+    return f.calculaSalario();
+}
+Não use getSalario() quando a questão pede salário com taxas e bônus.
+
+SOMA, CONTAGEM, MÉDIA E MAIOR
+Double soma = 0.0;
+int quantidade = 0;
+Funcionario maior = null;
+for (Funcionario f : funcionarios) {
+    if (f == null) { continue; }
+    soma += f.calculaSalario();
+    quantidade++;
+    if (maior == null || f.calculaSalario() > maior.calculaSalario()) {
+        maior = f;
+    }
+}
+double media = quantidade == 0 ? 0.0 : soma / quantidade;
+
+Não divida a soma por vetor.length se houver posições vazias.
+Use o mesmo atributo/cálculo para comparar e retornar o maior.
+Se o cálculo altera o objeto, não o chame repetidamente só para comparar.
+
+======================================================================
+[HERANCA] 11. HERANÇA, super E SOBRESCRITA
+======================================================================
+public class Auxiliar extends Funcionario { ... }
+
+A filha herda comportamentos acessíveis do pai e pode acrescentar outros.
+O objeto Auxiliar inclui a parte Funcionario; super não cria outro objeto
+separado para ser usado como pai.
+
+@Override
+public Double calculaSalario() {
+    Double base = super.calculaSalario();
+    return base * 1.15;
+}
+
+Se o pai já aplica 10% de imposto, super.calculaSalario() já está líquido.
+NÃO multiplique por 0.90 novamente sem uma segunda taxa exigida.
+
+SOBRESCREVER SUBSTITUI A IMPLEMENTAÇÃO EXECUTADA
+Se Imovel.calculaPreco() verifica ativo, mas Residencial.calculaPreco()
+usa getPreco() diretamente, a verificação do pai foi pulada.
+
+Opção A — reaproveitar o pai:
+Double base = super.calculaPreco(); // zero se inativo
+return base * fator;
+
+Opção B — preservar a condição explicitamente:
+if (!isAtivo()) { return 0.0; }
+return getPreco() * fator;
+
+Em herança de vários níveis, super.metodo() pode incluir regras do nível
+intermediário: Pickup -> Carro -> Veiculo. Leia a cadeia inteira.
+
+Regras de sobrescrita: assinatura compatível, retorno compatível e sem
+reduzir a visibilidade. Um método public do pai não pode virar private na
+filha. Métodos private não são sobrescritos. Métodos static são ocultados,
+não despachados por polimorfismo de instância.
+
+======================================================================
+[POLIMORFO] 12. USAR A CLASSE PAI SEM CITAR TODAS AS FILHAS
+======================================================================
+Funcionario f = new Auxiliar(1, "ACERVO", "Ana", 1000.0);
+System.out.println(f.calculaSalario());
+
+Na compilação: f dá acesso ao que Funcionario declara e expõe.
+Na execução: calculaSalario() sobrescrito roda conforme o objeto Auxiliar.
+
+Assim, Biblioteca pode calcular salários diferentes com:
+for (Funcionario f : funcionarios) {
+    if (f != null) { System.out.println(f.calculaSalario()); }
+}
+
+Não precisa de instanceof para métodos já declarados no pai.
+Mas f.organizarLivros("Romance") não compila se Funcionario não declara
+organizarLivros. O tipo real Auxiliar não amplia o que a referência
+Funcionario permite chamar na compilação.
+
+Quando usar cada técnica:
+- Mesmo comportamento com cálculo diferente: sobrescrita + polimorfismo.
+- Método exclusivo de uma filha: instanceof + casting.
+- Entradas diferentes para operação de mesmo nome: sobrecarga.
+- Evitar repetir a parte comum do cálculo: super.metodo().
+
+======================================================================
+[CASTING] 13. CASTING DE OBJETOS — FOCO DA PROVA
+======================================================================
+UPCASTING: filha -> pai. É implícito e seguro.
+Auxiliar aux = new Auxiliar(1, "ACERVO", "Ana", 1000.0);
+Funcionario f = aux;
+Funcionario outro = new Atendente(2, "NOITE", "Bia", 1000.0);
+
+DOWNCASTING: referência do pai -> filha. Exige compatibilidade real.
+if (f instanceof Auxiliar) {
+    Auxiliar a = (Auxiliar) f;
+    System.out.println(a.organizarLivros("Romance"));
+}
+
+O cast NÃO transforma o objeto. f e a apontam para o mesmo Auxiliar.
+O cast permite tratar a referência por um tipo mais específico.
+
+ERRO DE EXECUÇÃO
+Funcionario f = new Atendente(2, "NOITE", "Bia", 1000.0);
+Auxiliar a = (Auxiliar) f; // compila; lança ClassCastException
+O objeto real é Atendente, não Auxiliar.
+
+ERRO DE COMPILAÇÃO
+Auxiliar a = new Atendente(...); // classes irmãs não são atribuíveis
+Não coloque esse exemplo inválido no seu arquivo de entrega.
+
+NULL
+Funcionario f = null;
+(f instanceof Auxiliar) é false.
+(Auxiliar) f resulta em null; o cast sozinho não lança ClassCastException.
+Chamar método nesse resultado nulo causa NullPointerException.
+
+MODELO DE TAREFA ESPECÍFICA
+public String executaTarefa(Funcionario f, String dado) {
+    if (f instanceof Bibliotecario) {
+        Bibliotecario b = (Bibliotecario) f;
+        return b.processarEmprestimo(dado);
+    }
+    if (f instanceof Auxiliar) {
+        Auxiliar aux = (Auxiliar) f;
+        return aux.organizarLivros(dado);
+    }
+    if (f instanceof Atendente) {
+        Atendente ate = (Atendente) f;
+        return ate.atenderUsuario(dado);
+    }
+    return "";
+}
+
+FILTRO É CASTING APLICADO A UM VETOR
+if (imoveis[i] instanceof Residencial) {
+    resultado[posicao++] = (Residencial) imoveis[i];
+}
+
+VARIAÇÃO MODERNA, SOMENTE SE ACEITA PELO PROFESSOR/JAVA
+if (f instanceof Auxiliar aux) {
+    return aux.organizarLivros(dado);
+}
+O molde clássico acima costuma ser o mais fácil de adaptar aos slides.
+
+ORDEM DOS TESTES
+Se testar instanceof Pai antes de instanceof Filha, o objeto Filha também
+satisfaz o teste Pai. Em else if, teste o mais específico primeiro.
+Um Auxiliar é instanceof Auxiliar E instanceof Funcionario E Object.
+
+CASTING NUMÉRICO NÃO É CASTING DE OBJETOS
+int n = (int) 8.9;       // 8: trunca, não arredonda
+long grande = 3000000000L;
+int pequeno = (int) grande; // pode perder informação
+Double x = 8.9;
+int inteiro = x.intValue(); // conversão explícita do wrapper
+Não confunda truncar valor com descobrir a subclasse de um objeto.
+
+======================================================================
+[MODELO] 14. EXEMPLO COMPLETO E ADAPTÁVEL
+======================================================================
+Quatro arquivos. Nomes e regras são didáticos; não substituem assinaturas
+exigidas por uma prova. Este exemplo usa um único cadastro com Pessoa.
+
+--- Pessoa.java ---
+public class Pessoa {
+    private String nome;
+    private Double base;
+    public Pessoa(String nome, Double base) {
+        this.nome = nome;
+        this.base = base;
+    }
+    public String getNome() { return nome; }
+    public Double getBase() { return base; }
+    public Double calcular() { return base * 0.90; }
+}
+
+--- Especialista.java ---
+public class Especialista extends Pessoa {
+    public Especialista(String nome, Double base) { super(nome, base); }
+    @Override
+    public Double calcular() { return super.calcular() * 1.20; }
+    public String tarefa(String dado) { return "Analisado: " + dado; }
+}
+
+--- Cadastro.java ---
+public class Cadastro {
+    private Pessoa[] pessoas = new Pessoa[10];
+    public boolean adicionar(Pessoa p) {
+        for (int i = 0; i < pessoas.length; i++) {
+            if (pessoas[i] == null) {
+                pessoas[i] = p;
+                return true;
+            }
+        }
+        return false;
+    }
+    public Pessoa buscar(String nome) {
+        for (Pessoa p : pessoas) {
+            if (p != null && p.getNome().equalsIgnoreCase(nome)) {
+                return p;
+            }
+        }
+        return null;
+    }
+    public boolean excluir(String nome) {
+        for (int i = 0; i < pessoas.length; i++) {
+            if (pessoas[i] != null &&
+                pessoas[i].getNome().equalsIgnoreCase(nome)) {
+                pessoas[i] = null;
+                return true;
+            }
+        }
+        return false;
+    }
+    public Especialista[] especialistas() {
+        Especialista[] resultado = new Especialista[pessoas.length];
+        int posicao = 0;
+        for (Pessoa p : pessoas) {
+            if (p instanceof Especialista) {
+                resultado[posicao++] = (Especialista) p;
+            }
+        }
+        return resultado;
+    }
+    public Double total(String nome) {
+        Pessoa p = buscar(nome);
+        return p == null ? 0.0 : p.calcular();
+    }
+    public String executar(Pessoa p, String dado) {
+        if (p instanceof Especialista) {
+            Especialista e = (Especialista) p;
+            return e.tarefa(dado);
+        }
+        return "";
+    }
+}
+
+--- PrincipalConsulta.java ---
+public class PrincipalConsulta {
+    public static void main(String[] args) {
+        Cadastro cadastro = new Cadastro();
+        Pessoa p = new Especialista("Ana", 1000.0); // upcasting
+        cadastro.adicionar(p);
+        System.out.println(cadastro.total("ana")); // 1080.0
+        System.out.println(cadastro.executar(p, "Livro"));
+        System.out.println(cadastro.especialistas()[0].getNome()); // Ana
+        System.out.println(cadastro.excluir("Ana")); // true
+        System.out.println(cadastro.buscar("Ana")); // null
+    }
+}
+
+======================================================================
+[CALCULOS] 15. RECEITAS MATEMÁTICAS PARA ADAPTAR
+======================================================================
+PRIMEIRO: identifique a base, a unidade e a ordem exigida.
+Valor por dia multiplica por dias. Taxa única entra uma vez.
+Porcentagem precisa de uma base: salário, preço, subtotal, lucro etc.
+
+PORCENTAGEM
+Parte correspondente a p%: base * p / 100.0
+Aumentar em p%:            base * (1 + p / 100.0)
+Reduzir em p%:             base * (1 - p / 100.0)
+Reajuste recebido em reais: resultado - base
+
+Tabela de fatores:
+Percentual     Aumento         Desconto/redução
+  3%           * 1.03          * 0.97
+  5%           * 1.05          * 0.95
+  7%           * 1.07          * 0.93
+ 10%           * 1.10          * 0.90
+ 15%           * 1.15          * 0.85
+ 20%           * 1.20          * 0.80
+ 25%           * 1.25          * 0.75
+ 30%           * 1.30          * 0.70
+ 50%           * 1.50          * 0.50
+100%           * 2.00          * 0.00
+
+"Reduzir EM um quarto" = retirar 25% = base * 0.75.
+"Reduzir PARA um quarto" = ficar com 25% = base * 0.25.
+"Aumentar 100%" = dobrar; não é base + 100.
+
+TAXAS SUCESSIVAS VERSUS MESMA BASE
+Aumento de 20% e depois desconto de 10%:
+1000 * 1.20 * 0.90 = 1080. Não é 1000 * 1.10.
+Dois aumentos sucessivos de 10%: 1000 * 1.10 * 1.10 = 1210.
+Duas taxas de 10% e 5% sobre a MESMA base:
+1000 + 1000*0.10 + 1000*0.05 = 1150.
+Leia se as taxas são sobre o valor original ou sobre o valor reajustado.
+
+Fatores puramente multiplicativos podem trocar de ordem matematicamente,
+mas taxas fixas e arredondamentos intermediários mudam essa propriedade.
+(1000 + 50) * 0.90 = 945; 1000 * 0.90 + 50 = 950.
+
+FIXO, POR UNIDADE OU PERCENTUAL?
+"frete de R$ 30"       -> subtotal + 30
+"R$ 30 por item"      -> subtotal + quantidade * 30
+"frete de 3%"         -> subtotal * 1.03
+"desconto de R$ 20"   -> subtotal - 20
+"desconto de 20%"     -> subtotal * 0.80
+Double desconto não informa sozinho se é percentual: leia o texto.
+
+MÉDIA SIMPLES
+media = (n1 + n2 + n3) / 3.0;
+Não use n1 + n2 + n3 / 3.0: dividiria só a última nota.
+
+MÉDIA PONDERADA
+media = (n1*p1 + n2*p2 + n3*p3) / (p1+p2+p3);
+Ex.: 6*2 + 8*3, dividido por 5 = 7.2.
+
+PERCENTUAL ATINGIDO
+percentual = parte * 100.0 / total;
+Confirme total > 0. Ex.: 15 de 20 = 75%.
+
+CONSUMO, DISTÂNCIA E TEMPO
+Autonomia (km) = litros * rendimento (km/L).
+Litros necessários = distância / rendimento.
+Custo combustível = litros * preço por litro.
+Tempo em horas = distância / velocidade (km/h).
+Velocidade média = distância / tempo.
+Minutos para horas = minutos / 60.0.
+Não multiplique nem divida por 1000 sem uma conversão de unidade pedida.
+
+GEOMETRIA E IMC — APOIO GERAL, NÃO PREVISÃO DA PROVA
+Retângulo: área = base * altura; perímetro = 2*(base+altura).
+Quadrado: área = lado*lado; perímetro = 4*lado.
+Círculo: área = Math.PI*raio*raio; perímetro = 2*Math.PI*raio.
+Volume de caixa = comprimento*largura*altura.
+1 m³ = 1000 L; 1 L = 1000 cm³. Só converta se as unidades exigirem.
+IMC = pesoKg / (alturaMetros * alturaMetros).
+Java não usa ^ para potência: altura ^ 2 NÃO é elevar ao quadrado.
+Use altura * altura ou Math.pow(altura, 2).
+
+LUCRO E MARGEM — APOIO GERAL
+lucro = venda - custo;
+acréscimo sobre custo (%) = lucro * 100.0 / custo;
+margem sobre venda (%) = lucro * 100.0 / venda;
+São bases diferentes. Verifique denominador diferente de zero.
+
+ARREDONDAMENTO E COMPARAÇÃO
+System.out.printf("%.2f%n", valor); // formata a exibição
+Math.round(valor * 100.0) / 100.0; // arredonda numericamente para centavos
+Só arredonde se pedido; arredondar em cada etapa pode mudar o resultado.
+Para testar doubles: Math.abs(obtido - esperado) < 0.000001.
+Não compare Double com == esperando comparação confiável do valor.
+Na prática financeira, BigDecimal pode ser apropriado; na prova, use o
+tipo solicitado e não troque a assinatura do professor.
+
+======================================================================
+[EXEMPLOS] 16. FÓRMULAS DAS AVALIAÇÕES ENCONTRADAS
+======================================================================
+A) BIBLIOTECA — base de R$ 1000 para conferir
+Funcionario:           salario * 0.90        = 900
+Bibliotecario SENIOR:  salario * 1.30 * 0.90 = 1170
+Bibliotecario JUNIOR:  salario * 1.10 * 0.90 = 990
+Auxiliar ACERVO:       salario * 1.15 * 0.90 = 1035
+Auxiliar LIMPEZA:      salario * 1.05 * 0.90 = 945
+Atendente MANHA:       salario * 0.90        = 900
+Atendente NOITE:       salario * 1.20 * 0.90 = 1080
+
+Se usar super.calculaSalario(), não reaplique os 10% de imposto.
+LIMPEZA pertence ao Auxiliar; JUNIOR pertence ao Bibliotecario.
+Retorno de mostraSalario: calculaSalario(), não salário base.
+Construtores exigidos das filhas: (int registro, String especializacao,
+String nome, Double salario). Use cargo/setor/turno conforme a classe.
+
+B) IMOBILIÁRIA — preço base de R$ 1000 para conferir
+CASA / LOCAÇÃO:         preco * 1.10 = 1100
+CASA / COMPRA:          preco * 1.05 = 1050
+APARTAMENTO / LOCAÇÃO:  preco * 1.15 = 1150
+APARTAMENTO / COMPRA:   preco * 1.03 = 1030
+BAIRRO / LOCAÇÃO:       preco * 1.05 = 1050
+BAIRRO / COMPRA:        preco * 1.07 = 1070
+CENTRO / LOCAÇÃO:       preco * 1.15 = 1150
+CENTRO / COMPRA:        preco * 1.20 = 1200
+
+Inativo: preço calculado zero, conforme a regra herdada e referência.
+Construtor Residencial: tipo = 'R'; Comercial: tipo = 'C'.
+Cadastro: adicionaImovel, sem r, conforme interface e esclarecimento.
+residenciais/comerciais: selecionar por tipo real com instanceof.
+
+C) FROTA — HERANÇA EM VÁRIOS NÍVEIS
+Veiculo: autonomia = combustivel * rendimento.
+Motocicleta: autonomia = super.autonomia() / passageiros.
+Carro automático: super.autonomia() * 0.90; manual mantém.
+Hatch, volume do bagageiro:
+  passageiros < 3: volume * 2.0
+  passageiros == 3: volume * 1.5
+  passageiros > 3: volume
+O aumento de volume NÃO aumenta autonomia sem regra específica.
+Pickup, considerando a autonomia herdada de Carro:
+  carga == 0: base
+  carga == capacidade: base * 0.50
+  0 < carga < capacidade: base * 0.75
+  carga > capacidade: impedir conforme contrato do exercício.
+Se automática e cheia: 50 L * 10 km/L * 0.90 * 0.50 = 225 km.
+Motocicleta: não dividir por zero; preserve passageiros válidos.
+
+D) VEÍCULO / LOCADORA — SOBRECARGA E ALTERAÇÃO DE ESTADO
+ECONOMICO: diária 100; SUV: diária 150; LUXO: diária 250.
+Todos: R$ 0,10 por km.
+Só dias: kmRodados = dias * 100.
+Dias e km: usar kmRodados informado.
+Com seguro true: acrescentar dias * 50.0.
+Total = dias * diaria + kmRodados * 0.10 + custoSeguro.
+Atualização: quilometragem += kmRodados, UMA VEZ por locação.
+Ex.: ECONOMICO, 3 dias, só dias -> 300 km -> 300 + 30 = R$ 330.
+Com 300 km e seguro -> 300 + 30 + 150 = R$ 480.
+
+public Double calcularLocacao(int dias) {
+    return calcularLocacao(dias, dias * 100, false);
+}
+public Double calcularLocacao(int dias, int kmRodados) {
+    return calcularLocacao(dias, kmRodados, false);
+}
+public Double calcularLocacao(int dias, int kmRodados, boolean seguro) {
+    double diaria = 0.0;
+    if ("ECONOMICO".equalsIgnoreCase(tipo)) { diaria = 100.0; }
+    else if ("SUV".equalsIgnoreCase(tipo)) { diaria = 150.0; }
+    else if ("LUXO".equalsIgnoreCase(tipo)) { diaria = 250.0; }
+    quilometragem += kmRodados;
+    return dias * diaria + kmRodados * 0.10 + (seguro ? dias * 50.0 : 0.0);
+}
+Molde assume tipo e quantidades válidos; valide conforme o contrato.
+
+E) RESERVA / HOTEL — TAXA ÚNICA NÃO É DIÁRIA
+Total = diarias * (200 + (incluiRefeicoes ? 50 : 0)).
+Taxa de limpeza: somar UMA VEZ ao total.
+Ex.: 3 dias com refeições e limpeza 80 -> 3*250 + 80 = R$ 830.
+Passeio: CAVALGADA 80; TRILHA 60; PESCA 70; outro tipo 0.
+Passeio com quantidade: valorUnitario * quantidade.
+O enunciado local diverge entre adicionarPasseio no diagrama e
+adicionaPasseio no texto. Antes de codificar, confira a assinatura usada
+pelo material/validador; não escolha um nome arbitrariamente.
+
+F) PRODUTO / LOJA — CÁLCULO + ESTADO
+Venda: total = quantidade * preco; estoque -= quantidade.
+Venda com desconto no enunciado local: total = quantidade * preco - desconto.
+Nesse exemplo, desconto é VALOR ABSOLUTO, não percentual.
+Compra: total = quantidade * preco; estoque += quantidade.
+Compra com frete: quantidade * preco + frete; estoque += quantidade.
+Valor do estoque = preco * estoque.
+Estoque com imposto percentual p = preco * estoque * (1 + p/100.0),
+considerando p informado como 10 para 10%; confirme a convenção.
+
+Ex.: preço 50; estoque 10; vender 3 com desconto 10:
+retorno 3*50 - 10 = 140; novo estoque 7.
+Frete não multiplica por quantidade se é taxa única.
+Não permita venda maior que estoque. O retorno da recusa precisa seguir
+o contrato do exercício; não invente que toda recusa deve retornar 0.
+Se o texto não define, explicite sua escolha em vez de esconder a dúvida.
+
+G) ÔNIBUS — CAPACIDADE E ESTADO
+passageirosAtuais começa em 0; tarifa padrão = 4.50.
+Embarcar q: verificar q > 0 e atuais + q <= capacidade; então atuais += q.
+Desembarcar q: verificar q > 0 e q <= atuais; então atuais -= q.
+Se não puder atender toda a quantidade, não altere o estado e retorne false.
+Versão sem quantidade pode chamar a versão com quantidade 1.
+
+public boolean embarcarPassageiro(int quantidade) {
+    if (quantidade <= 0 || passageirosAtuais + quantidade > capacidade) {
+        return false;
+    }
+    passageirosAtuais += quantidade;
+    return true;
+}
+public boolean embarcarPassageiro() { return embarcarPassageiro(1); }
+
+Renda SIMPLES = passageirosAtuais * tarifa.
+Renda INTEGRADA = passageirosAtuais * tarifa * 1.5.
+Ex.: 10 passageiros, tarifa 4.50 -> simples 45; integrada 67.50.
+Use os passageiros atuais porque é o que esse enunciado pede; não invente
+acumulador histórico de passageiros ou de receita.
+
+======================================================================
+[MENU] 17. MAIN, ENTRADA DE DADOS E MENU REPETIDO
+======================================================================
+Escreva main só se pedido ou se precisar testar. Não reescreva a interface
+fornecida sem necessidade.
+
+import java.util.Scanner;
+public class MenuConsulta {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+        int opcao;
+        do {
+            System.out.println("1 - Consultar | 0 - Sair");
+            opcao = entrada.nextInt();
+            entrada.nextLine(); // consome fim de linha
+            switch (opcao) {
+                case 1:
+                    System.out.print("Nome: ");
+                    String nome = entrada.nextLine();
+                    System.out.println(nome);
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Opcao invalida");
+            }
+        } while (opcao != 0);
+        entrada.close();
+    }
+}
+
+Scanner.nextInt()/nextDouble() deixam o fim de linha pendente.
+Antes do próximo nextLine(), consuma esse fim de linha quando necessário.
+Alternativa: ler tudo com nextLine() e converter com Integer.parseInt(...)
+ou Double.parseDouble(...). Não misture estratégias sem observar a entrada.
+Scanner de decimais depende da localidade; Double.parseDouble usa ponto.
+
+======================================================================
+[ERROS] 18. SEUS ERROS RECORRENTES E COMO EVITAR
+======================================================================
+1) Construtor na ordem errada.
+   Copie o cabeçalho do enunciado antes de escrever o corpo.
+2) Construtor private em classe criada pela interface.
+   Use public quando Principal precisar instanciar a classe.
+3) Retornar getSalario em vez de calculaSalario.
+   Getter devolve atributo; cálculo aplica regra de negócio.
+4) Copiar condição de outra classe: JUNIOR no Auxiliar.
+   Compare as palavras do if com as categorias daquela classe.
+5) Esquecer o ativo na sobrescrita.
+   Use super.calculaPreco() ou preserve explicitamente a condição.
+6) Testar o vetor resultado, que está vazio.
+   instanceof no objeto de origem; cast para gravar no resultado.
+7) Acessar imoveis[i].descricao sem conferir null.
+   Primeiro null; depois o getter.
+8) Não implementar um método pedido, como comerciais().
+   Faça inventário de TODOS os métodos antes da entrega.
+9) Nome parecido, mas diferente: processa/processar, adiciona/adicionar.
+   Java exige o identificador exato usado pelo contrato.
+10) Geany sobrescrever correções feitas fora do editor.
+    Alteração externa desejada: Recarregar. Sobrescrever grava o buffer
+    do editor sobre o arquivo do disco. Confira antes de escolher.
+
+MENSAGENS QUE AJUDAM A LOCALIZAR O ERRO
+cannot find symbol: nome errado, método ausente ou variável fora do escopo.
+... has private access: visibilidade impede o acesso.
+constructor ... cannot be applied: tipos/quantidade/ordem incompatíveis.
+missing return statement: algum caminho termina sem devolver o retorno.
+method does not override ...: assinatura de @Override não corresponde.
+NullPointerException: acessou membro de referência nula; olhe a linha.
+ClassCastException: cast para tipo incompatível com o objeto real.
+ArrayIndexOutOfBoundsException: índice negativo ou >= tamanho do vetor.
+NoSuchMethodError: classe executável procura método/constructor com
+assinatura que não existe na classe carregada; recompile e confira classpath.
+Could not find or load main class: nome da classe, pacote ou classpath errado.
+Can't connect to X11: problema de acesso à tela gráfica; não prova falha
+na regra de negócio. Rode na sessão gráfica apropriada.
+
+Não resolva um erro apagando método exigido ou mudando a assinatura para
+algo que só compila localmente. Resolva a causa mantendo o contrato.
+
+======================================================================
+[TESTES] 19. TESTE MANUAL QUE ENCONTRA ERROS RÁPIDO
+======================================================================
+CÁLCULOS: use base 100 ou 1000; escolha ao menos um caso por if.
+BOOLEAN: ativo/inativo; com/sem seguro; com/sem refeições.
+LIMITES: zero, um, abaixo do limite, igual ao limite e acima do limite.
+VETORES:
+  vazio; um objeto; tipos misturados; lotado; busca ausente;
+  exclusão existente; exclusão repetida; busca depois de abrir lacuna;
+  nova inserção aproveitando a primeira lacuna.
+CASTING: objeto de cada filha; tipo não suportado; null se permitido.
+FILTROS: nenhum do tipo; um; vários; posições vazias entre os elementos.
+ESTADO: compare atributo ANTES e DEPOIS de vender, comprar, embarcar e locar.
+
+Exemplo de conferência simples:
+double esperado = 1200.0;
+double obtido = comercial.calculaPreco();
+if (Math.abs(obtido - esperado) > 0.000001) {
+    System.out.println("Falha: " + obtido);
+}
+
+Teste não é só imprimir um valor: saiba o resultado esperado antes.
+Não use um teste do próprio método como oráculo para ele mesmo.
+
+======================================================================
+[ENTREGA] 20. ESTRATÉGIA PARA MAXIMIZAR PONTOS
+======================================================================
+ORDEM RECOMENDADA
+1. Entenda UML e assinaturas. Liste todos os métodos pedidos.
+2. Construa a classe base e compile.
+3. Construa filhas com super(...) e compile.
+4. Implemente os cálculos e teste a tabela de casos.
+5. Faça cadastro, busca e exclusão com proteção contra null.
+6. Faça filtros com instanceof e casting.
+7. Integre a interface/main e teste o fluxo.
+8. Revise strings exigidas, retornos e nomes exatos.
+
+SE O TEMPO ESTIVER ACABANDO
+Priorize assinatura correta + implementação simples que você entende.
+Não deixe construtor privado bloquear a criação da classe inteira.
+Não deixe um null derrubar busca/exclusão em qualquer vetor vazio.
+Não substitua testes de tipo por comparações de String sem necessidade.
+Evite reescrever partes corretas só para ficar parecido com o gabarito.
+O guia ajuda a reduzir erros; não garante uma nota nem prevê a prova.
+
+CHECKLIST FINAL
+[ ] Arquivo e classe pública têm o mesmo nome.
+[ ] Uma classe pública por arquivo; sem duplicatas no mesmo pacote.
+[ ] Não acrescentei package diferente do esperado pelo projeto.
+[ ] Tipos, retornos, nomes e parâmetros coincidem com o contrato.
+[ ] Construtor sem retorno, com visibilidade adequada.
+[ ] super(...) recebe os argumentos corretos.
+[ ] Não declarei campos duplicados na filha sem necessidade.
+[ ] Todos os ramos retornam algo quando necessário.
+[ ] Mantive as regras do pai ao sobrescrever.
+[ ] Casts protegidos com instanceof.
+[ ] Comparações de String usam equals/equalsIgnoreCase conforme exigido.
+[ ] Verifiquei null antes de acessar elementos do vetor.
+[ ] Filtros percorrem a origem e preenchem o resultado.
+[ ] Operações mudam estoque/km/passageiros uma única vez.
+[ ] Taxa fixa não foi confundida com porcentagem ou taxa por unidade.
+[ ] Não arredondei nem converti unidades sem necessidade.
+[ ] Testei TODOS os percentuais e estados.
+[ ] Compilação e execução usam as classes da pasta correta.
+
+COMPILAR NO TERMINAL — CLASSES SEM PACOTE
+cd "/caminho/da/pasta"
+javac -encoding UTF-8 *.java
+java -cp . Principal
+
+Não use java Principal.class. A execução recebe o nome da classe.
+Se Principal.java não foi fornecido mas Principal.class existe, preserve
+esse arquivo e suas classes internas Principal$....class. Compile suas
+classes de domínio e execute Principal com classpath apropriado.
+Se houver duas pastas com classes iguais, confira qual o classpath carrega.
+
+======================================================================
+[COMPLEMENTO] 21. CONCEITOS DE APOIO — NÃO CONFIRMADOS COMO AULAS PRÓPRIAS
+======================================================================
+static: pertence à classe. main é static; para usar atributos de instância,
+crie ou receba um objeto. Não transforme todos os atributos em static para
+contornar erro de acesso: isso faz objetos compartilharem o mesmo estado.
+
+final: variável não pode ser reatribuída depois de inicializada; método
+final não pode ser sobrescrito; classe final não pode ser estendida.
+final em uma referência não torna o objeto imutável.
+
+abstract: classe não pode ser instanciada diretamente; pode declarar
+métodos abstratos, cuja implementação é exigida da filha concreta.
+abstract class Forma { public abstract Double area(); }
+Não acrescente abstract à classe do professor se o contrato permite new.
+
+interface: descreve um contrato; uma classe usa implements para cumpri-lo.
+Também permite polimorfismo. Não confunda com interface GRÁFICA Swing:
+interface gráfica é a tela; interface Java é um tipo da linguagem.
+
+Object: superclasse de todas as classes. Uma referência Object aceita
+vários objetos, mas perde acesso direto aos métodos específicos.
+
+@Override
+public String toString() { return "Nome: " + nome; }
+Isso controla a representação textual do objeto. Sem sobrescrever,
+System.out.println(objeto) normalmente não mostra os atributos como deseja.
+
+equals: comparação lógica definida pela classe. Para String, compara o
+conteúdo. Em classes próprias, o comportamento herdado de Object compara
+identidade se você não o sobrescrever. Não implemente equals/hashCode
+sem necessidade nesta prova; siga o que o exercício exigir.
+
+======================================================================
+22. COMO ESTE GUIA FOI FUNDAMENTADO
+======================================================================
+Conteúdo programático: títulos visíveis na captura do Classroom enviada.
+Não houve leitura autenticada das postagens nem dos slides do Classroom.
+Enunciados locais consultados:
+- Avaliação Casting Biblioteca.pdf
+- Avaliação Casting V - gráfica.pdf (Imobiliária)
+- Avaliação Classe e métodos 2024.pdf (locação de veículos)
+- Avaliação Classe e métodos 2024 2 chamada.pdf (produtos)
+- Avaliação Classe e métodos 2025.pdf (reservas)
+- Avaliação Classe e métodos 2025 2 chamada.pdf (ônibus)
+- Herança e Polimorfismo III.pdf (frota)
+Também foram consultados exemplos locais de Aluno/Escola e Paciente/Clínica,
+a resolução de Biblioteca em Downloads, a referência da subpasta de
+Imobiliária e as versões originais/corrigidas analisadas nesta conversa.
+As seções de apoio geral estão identificadas; não são afirmação de que
+todas essas fórmulas ou palavras-chave serão cobradas pelo professor.
+
+FIM — Leia a assinatura, identifique a regra e teste um caso de cada vez.

@@ -1,0 +1,33 @@
+EXERCICIOS DE CASTING - JAVA
+
+Nivel 1
+1. Explique com suas palavras o que e upcasting.
+2. Explique o que e downcasting.
+3. Para que serve instanceof?
+4. Identifique o casting: Funcionario f = new Atendente(1, "DIA", "Ana", 2000.0);
+5. Identifique o casting: Atendente a = (Atendente) f;
+
+Nivel 2
+6. Crie um Bibliotecario e guarde-o em uma variavel Funcionario.
+7. Verifique com instanceof se a variavel e Bibliotecario.
+8. Faca downcasting e chame processarEmprestimo("Java").
+9. Crie um Auxiliar, guarde como Funcionario e chame organizarLivros("Historia") usando casting seguro.
+10. Explique por que f.calculaSalario() pode funcionar sem casting.
+
+Nivel 3
+11. Escreva um metodo que receba Funcionario e imprima o tipo real usando instanceof.
+12. Escreva um metodo que receba Funcionario e String e execute a tarefa especifica de cada classe filha.
+13. Explique o erro em: Funcionario f = new Auxiliar(2, "ACERVO", "Bia", 1500.0); Atendente a = (Atendente) f;
+14. Reescreva mostraSalario usando apenas f.calculaSalario() e explique por que funciona.
+
+GABARITO RESUMIDO
+1. Filho para pai, automatico. 2. Pai para filho, explicito. 3. Verifica compatibilidade.
+4. Upcasting. 5. Downcasting (seguro somente se f guardar Atendente).
+6. Funcionario f = new Bibliotecario(1,"JUNIOR","Ana",2000.0);
+7. if (f instanceof Bibliotecario) { ... }
+8. Bibliotecario b = (Bibliotecario) f; b.processarEmprestimo("Java");
+9. if (f instanceof Auxiliar) { ((Auxiliar)f).organizarLivros("Historia"); }
+10. Polimorfismo: calculaSalario existe na classe pai e e sobrescrito.
+11-12. Use if (f instanceof Tipo), casting e metodo da classe filha.
+13. ClassCastException: objeto real e Auxiliar, nao Atendente.
+14. Funcionario f = buscaFuncionario(nome); return f == null ? 0.0 : f.calculaSalario();

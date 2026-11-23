@@ -1,0 +1,68 @@
+CONFIGURAR GEANY — INSTALAÇÃO SIMPLES
+
+Para Geany 2.x no Linux. Não use sudo para executar o instalador.
+
+COMO INSTALAR
+1. Salve seus trabalhos e feche todas as janelas do Geany.
+2. Abra um terminal nesta pasta (botão direito > Abrir no terminal).
+3. Digite:
+
+   sh configurar_geany.sh
+
+4. Quando aparecer "Pronto!", abra "Geany Java (escuro)" no menu de aplicativos.
+
+Não precisa dar chmod, baixar outros arquivos ou executar o instalador Python antigo.
+O arquivo .sh contém tudo. O instalador usa sh; o gerador Java usa Python 3.
+Requisitos: Geany 2.x, Python 3 e plugin Save Actions (incluído no Geany desta máquina).
+
+O QUE É CONFIGURADO
+- Tema escuro no editor.
+- Entrada "Geany Java (escuro)" no menu para abrir também a interface escura.
+- Completar símbolos e snippets do Geany.
+- Modelo Java minimalista, sem package, imports ou constantes.
+- Gerador de getters e setters por atalho.
+- Autosave de todos os arquivos modificados a cada 30 segundos.
+- Backup dos arquivos anteriores em ~/.config/geany/backups/.
+
+COMO USAR O MODELO JAVA
+Arquivo > Novo (com modelo) > main.java.
+Ao salvar, ajuste o nome da classe para corresponder ao nome do arquivo.
+
+COMO GERAR GETTERS E SETTERS
+1. Escreva um atributo por declaração entre // Atributos e // Construtores:
+
+   private String nome;
+   private int idade;
+
+2. Pressione Ctrl+A para selecionar a classe inteira.
+3. Pressione Ctrl+1.
+
+Se já houver outros comandos personalizados, o instalador usa outro número e
+mostra o atalho ao terminar. <Primary> significa Ctrl.
+Os métodos vão para // Getters e // Setters. Mantenha os comentários do modelo.
+O gerador evita duplicatas nos casos comuns, ignora atributos static e não
+cria setters para final. Para boolean, o getter começa com is.
+É um gerador simples para este modelo: não é um analisador Java completo.
+Classes aninhadas, anotações e declarações complexas podem não ser transformadas.
+Use Ctrl+Z no Geany se quiser desfazer a geração.
+
+AUTOSAVE
+Salve cada arquivo manualmente uma primeira vez, escolhendo nome e pasta.
+Depois disso, alterações são salvas a cada 30 segundos.
+
+SE DER ERRO
+- "feche o Geany": feche todas as janelas e execute novamente.
+- Programa ou plugin ausente: instale o componente indicado antes de repetir.
+- Nove comandos ocupados: o instalador para sem substituir seus comandos.
+
+BACKUP
+O instalador informa o caminho da pasta de backup.
+O LEIA-ME.txt dentro do backup lista o destino original de cada arquivo.
+Para restaurar, feche o Geany e copie os arquivos do backup de volta aos
+destinos indicados. Arquivos marcados como novos podem ser removidos.
+
+TESTES REALIZADOS
+Instalação e reinstalação em pasta temporária, preservação de configurações e
+comandos, caminhos com espaços, backup, configuração do autosave, bloqueio com
+Geany aberto, comandos lotados e compilação de uma classe Java gerada.
+A aparência visual e o temporizador de autosave não foram testados na interface.
