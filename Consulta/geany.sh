@@ -149,37 +149,80 @@ public class {untitled} {
 JAVA_TEMPLATE
 cat > "$stage/java-escuro.conf" <<'THEME'
 [theme_info]
-name=Java Escuro
-description=Tema escuro simples
-version=1.0
+name=Java VS Code Dark+
+description=Paleta inspirada no VS Code Dark+ para Java, com estilos reconhecidos pelo Geany 2.x
+version=2.0
+
+[named_colors]
+background=#1e1e1e
+foreground=#d4d4d4
+blue=#569cd6
+lightblue=#9cdcfe
+teal=#4ec9b0
+green=#6a9955
+orange=#ce9178
+lightgreen=#b5cea8
+purple=#c586c0
+yellow=#dcdcaa
+softgray=#858585
 
 [named_styles]
-default=#d4d4d4;#1e1e1e;false;false
+# As chaves abaixo seguem os nomes do Geany (filetypes.c / filetypes.java).
+# O script anterior usava 'word' e 'word2', que NAO sao estilos nomeados
+# reconhecidos nos esquemas de cor. Java herda os estilos de C e utiliza
+# keyword_1 e keyword_2; por isso as palavras-chave ficavam quase brancas.
+default=foreground;background;false;false
+error=#f44747;background;false;false
 selection=#ffffff;#264f78;false;true
-current_line=#d4d4d4;#282828;true
-margin_line_number=#858585;#1e1e1e
-margin_folding=#858585;#252526
-fold_symbol_highlight=#ffffff
-caret=#ffffff;#ffffff
-indent_guide=#404040
-white_space=#404040;#1e1e1e
-brace_good=#ffffff;#375737;true;false
-brace_bad=#ffffff;#803030;true;false
-call_tips=#d4d4d4;#252526
-comment=#6a9955
-comment_doc=comment
-comment_line=comment
-comment_line_doc=comment
-number=#b5cea8
-string=#ce9178
-character=string
-word=#569cd6;;true;false
-word2=#4ec9b0
-type=#4ec9b0
-operator=#d4d4d4
-preprocessor=#c586c0
-identifier=#d4d4d4
-error=#ffffff;#803030
+current_line=foreground;#252526;true;false
+brace_good=#d7ba7d;#333333;true;false
+brace_bad=#ffffff;#9b3030;true;false
+margin_line_number=softgray;background;false;false
+margin_folding=softgray;#252526;false;false
+fold_symbol_highlight=foreground
+indent_guide=#404040;;false;false
+white_space=#404040;background;false;false
+caret=#aeafad;#aeafad;false;false
+marker_line=#ffffff;#264f78;false;false
+marker_search=#ffffff;#515c6a;false;false
+marker_mark=#ffffff;#3a5a40;false;false
+call_tips=foreground;#252526;false;false
+
+# Cores sintaticas que realmente sao consumidas pelo lexer de Java
+comment=green
+comment_doc=green
+comment_line=green
+comment_line_doc=green
+comment_doc_keyword=teal;;true;false
+comment_doc_keyword_error=#f44747;;true;false
+number=lightgreen
+number_1=number
+number_2=number
+string=orange
+string_1=string
+string_2=string
+string_eol=orange;background;false;false
+character=orange
+keyword=blue;;false;false
+keyword_1=keyword
+keyword_2=blue;;false;false
+keyword_3=keyword
+keyword_4=keyword
+# Tipos primitivos de Java (int, double, boolean etc.) sao keywords secundarias.
+# Os nomes de tipos/classes podem receber uma cor diferente quando o lexer os identifica.
+type=teal;;false;false
+class=teal;;false;false
+function=yellow;;false;false
+parameter=lightblue;;false;false
+identifier=foreground;background;false;false
+identifier_1=identifier
+identifier_2=identifier
+identifier_3=identifier
+identifier_4=identifier
+operator=foreground;;false;false
+preprocessor=purple;;false;false
+regex=orange
+other=foreground
 THEME
 cat > "$stage/geany-java-escuro.desktop" <<'DESKTOP'
 [Desktop Entry]
