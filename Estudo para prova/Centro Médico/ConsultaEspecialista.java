@@ -23,7 +23,7 @@ public class ConsultaEspecialista extends Consulta{
     }
 
     // Métodos
-    
+    @Override 
     public double calculaPrecoFinal(){
 		double precoFinal;
 		if(retornoIncluso){

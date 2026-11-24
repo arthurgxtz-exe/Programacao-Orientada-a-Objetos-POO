@@ -9,6 +9,8 @@ public class Principal {
 		
 	}
     public static void main(String[] args) {
+        System.out.println(ConsultaEspecialista.class.getProtectionDomain().getCodeSource().getLocation()
+);
         Scanner scanf = new Scanner(System.in);
         
         Paciente p1 = new Paciente("Ana", false);

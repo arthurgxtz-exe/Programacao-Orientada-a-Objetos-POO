@@ -11,19 +11,22 @@ public class ConsultaCirurgica extends ConsultaEspecialista{
     
     
 
-    // Getters
+    // Getters
+
 
     public boolean getTaxaAnestesia() {
         return taxaAnestesia;
     }
 
-    // Setters
+    // Setters
+
 
     public void setTaxaAnestesia(boolean taxaAnestesia) {
         this.taxaAnestesia = taxaAnestesia;
     }
 
     // Métodos
+    @Override 
     public double calculaPrecoFinal(){
 		double precoFinal;
 		if(taxaAnestesia){
