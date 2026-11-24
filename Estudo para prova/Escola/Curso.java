@@ -1,9 +1,9 @@
 public class Curso {
     // Atributos
 	private Aluno aluno;
-	private valorBase;
+	private double valorBase;
     // Construtores
-    public Aluno(Aluno aluno, double valorBase){
+    public Curso(Aluno aluno, double valorBase){
 		this.aluno = aluno;
 		this.valorBase = valorBase;
 	}
@@ -15,7 +15,7 @@ public class Curso {
         return aluno;
     }
 
-    public private getValorBase() {
+    public double getValorBase() {
         return valorBase;
     }
 
@@ -25,7 +25,7 @@ public class Curso {
         this.aluno = aluno;
     }
 
-    public void setValorBase(private valorBase) {
+    public void setValorBase(double valorBase) {
         this.valorBase = valorBase;
     }
 
@@ -33,7 +33,7 @@ public class Curso {
     
     public double calcularValor(){
 		double valorFinal;
-		if(aluno.bolsista){
+		if(aluno.getBolsista()){
 			valorFinal = valorBase - (valorBase * 0.30);
 			return valorFinal;
 		}

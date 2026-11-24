@@ -21,7 +21,7 @@ public class CursoOnline extends Curso {
     }
 
     // Métodos
-    @Overrride
+    @Override
 	public double calcularValor(){
 		double valorFinal;
 		valorFinal = super.calcularValor() + taxaPlataforma;
